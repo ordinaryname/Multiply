@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Multiply</string>
+    <string name="confirm">Are you sure you want to restart the game?</string>
+    <string name="validate">Do you want to check your answers?</string>
+    <string name="validate_error">When you have filled in the entire grid, click here.</string>
+    <string name="wrong_answer">Some of your answers are in correct.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">Okay</string>
+    <string name="multiply_app">Multiply App</string>
+    <string name="start_game">Start Game</string>
+    <string name="info_page_text">An app about multiplication. Complete the grid as fast as you can.</string>
+</resources>
