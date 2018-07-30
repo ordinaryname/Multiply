@@ -3,6 +3,7 @@ package com.mutyaba.multiply;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -75,6 +77,9 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
             if(i != 5 && i != 11 && i != 17 && i != 23 && i != 29 && i != 30 && i != 31 && i != 32 && i != 33 && i != 34) {
                 if(gridBools[i]) {
                     intArray.valueAt(i).setText("");
+                    intArray.valueAt(i).setBackgroundColor(Color.parseColor("#eeeeee"));
+                } else {
+                    intArray.valueAt(i).setBackgroundColor(Color.WHITE);
                 }
             }
         }
@@ -133,7 +138,11 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
 
     private void NumberSelected(Button h) {
         for(int i = 0; i < intArray.size(); i++) {
-            intArray.valueAt(i).setBackgroundColor(Color.WHITE);
+            if(gridBools[i]) {
+                intArray.valueAt(i).setBackgroundColor(Color.parseColor("#eeeeee"));
+            } else {
+                intArray.valueAt(i).setBackgroundColor(Color.WHITE);
+            }
         }
         h.setBackgroundColor(Color.parseColor("#dddddd"));
         currentButton = h;
@@ -279,8 +288,12 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
                 break;
             }
             if(j == i.length - 1) {
-                if(i[j] != a[j]) {
+                if(i[j] == a[j]) {
                     SaveTime(chronometer.getText().toString());
+                    Log.d("Chronometer", chronometer.getText().toString());
+                    Toast.makeText(this, "Congratulations!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, StartGame.class);
+                    startActivity(intent);
                 }
             }
         }
@@ -309,11 +322,11 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
     }
 
     public void SaveTime(String pTime) {
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("com.mutyaba.multiply.scores", Context.MODE_PRIVATE);
         String currentTimes = sharedPreferences.getString("times", "");
         String currentDate = sharedPreferences.getString("dates", "");
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        String timeStamp = new SimpleDateFormat("MM/DD/YYYY", Locale.US).format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
         if(currentTimes.equals("")) {
             editor.putString("times", pTime);
             editor.putString("dates", timeStamp);
