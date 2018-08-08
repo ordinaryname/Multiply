@@ -10,4 +10,6 @@
     <string name="multiply_app">Multiply App</string>
     <string name="start_game">Start Game</string>
     <string name="info_page_text">An app about multiplication. Complete the grid as fast as you can.</string>
+    <string name="simple_calculator">Simple Calculator: Pick a number above</string>
+    <string name="number_entry">Number Entry: Pick a space above</string>
 </resources>

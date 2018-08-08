@@ -7,29 +7,29 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MainActivity extends Activity implements Confirmation.ConfirmationListener, Validation.ValidationListener, ValidationError.ValidationErrorListener, WrongAnswer.WrongAnswerListener {
 
-    public ImageButton undoBtn, deleteBtn, startOverBtn;
-
+    public ImageButton deleteBtn, startOverBtn;
+    public TextView calcView;
     public Button currentButton;
     public SparseArray<Button> intArray;
     public Boolean[] gridBools;
+    public Boolean cViewSwitch;
     public int i1, i2;
     public Chronometer chronometer;
 
@@ -41,17 +41,28 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
         }
     };
 
+    private View.OnClickListener calcOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            cViewSwitch = true;
+            v.setBackgroundColor(Color.parseColor("#eeeeee"));
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cViewSwitch = false;
 
         intArray = new SparseArray<>();
         gridBools = new Boolean[35];
         chronometer = findViewById(R.id.chronometerView);
-        undoBtn = findViewById(R.id.undo);
         deleteBtn = findViewById(R.id.delete);
         startOverBtn = findViewById(R.id.startover);
+        calcView = findViewById(R.id.calcView);
+
+        calcView.setOnClickListener(calcOnClick);
 
         PutIntoIntArray();
         InitializeGrid();
@@ -59,6 +70,12 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
         for(int i = 0; i < intArray.size(); i++) {
             intArray.valueAt(i).setOnClickListener(btnOnClick);
         }
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getWindow().setStatusBarColor(Color.parseColor("#cccccc"));
     }
 
     private void InitializeGrid() {
@@ -144,7 +161,23 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
                 intArray.valueAt(i).setBackgroundColor(Color.WHITE);
             }
         }
-        h.setBackgroundColor(Color.parseColor("#dddddd"));
+
+        if(cViewSwitch && !h.getText().toString().equals("")) {
+            float a;
+            h.setBackgroundColor(Color.parseColor("#ddeeee"));
+            String num = calcView.getText().toString();
+            if(num.equals("")) {
+                calcView.setText(h.getText().toString());
+            } else if(num.substring(num.length() - 1).equals("*")){
+                a = (Float.valueOf(num.substring(0, num.length() - 1)) * Integer.parseInt(h.getText().toString()));
+                calcView.setText(Float.toString(a));
+            } else if(num.substring(num.length() - 1).equals("/")){
+                a = (Float.valueOf(num.substring(0, num.length() - 1)) / Integer.parseInt(h.getText().toString()));
+                calcView.setText(Float.toString(a));
+            }
+        } else {
+            h.setBackgroundColor(Color.parseColor("#dddddd"));
+        }
         currentButton = h;
     }
 
@@ -218,10 +251,6 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
         intArray.valueAt(34).setText(Integer.toString(a[9]));
     }
 
-    public void Undo(View v) {
-
-    }
-
     public void Delete(View v) {
         int i = intArray.indexOfValue(currentButton);
         if(gridBools[intArray.indexOfValue(currentButton)]) {
@@ -234,6 +263,34 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
     public void StartOver(View v) {
         DialogFragment dialog = new Confirmation();
         dialog.show(getFragmentManager(), "ConfirmationFragment");
+    }
+
+    public void Multiply(View v) {
+        if(cViewSwitch) {
+            String num = calcView.getText().toString();
+            if(!num.equals("")) {
+                if (!num.substring(num.length() - 1).equals("*") || !num.substring(num.length() - 1).equals("/")) {
+                    num = num + "*";
+                    calcView.setText(num);
+                }
+            }
+        }
+    }
+
+    public void Divide(View v) {
+        if(cViewSwitch) {
+            String num = calcView.getText().toString();
+            if(!num.equals("")) {
+                if (!num.substring(num.length() - 1).equals("*") || !num.substring(num.length() - 1).equals("/")) {
+                    num = num + "/";
+                    calcView.setText(num);
+                }
+            }
+        }
+    }
+
+    public void Clear(View v) {
+        calcView.setText("");
     }
 
     public void CheckGrid(View v) {

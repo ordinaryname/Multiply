@@ -45,4 +45,10 @@ public class Scores extends Activity{
 
         setContentView(linearLayout, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getWindow().setStatusBarColor(Color.parseColor("#cccccc"));
+    }
 }

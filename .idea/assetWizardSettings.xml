@@ -51,8 +51,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="73" />
-                                                <entry key="trimmed" value="true" />
+                                                <entry key="scalingPercent" value="50" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -63,21 +62,17 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="555555" />
+                                      <entry key="backgroundColor" value="1a1a1a" />
                                       <entry key="backgroundImage" value="$USER_HOME$/Creative Cloud Files/MultiplyIcon.svg" />
                                       <entry key="backgroundLayerName" value="ic_multiplyicon_background" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Creative Cloud Files/1x/Artboard 1.png" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Creative Cloud Files/72ppi/IconM@72x.png" />
                                       <entry key="foregroundLayerName" value="ic_multiplyicon_foreground" />
+                                      <entry key="outputName" value="ic_m_icon" />
                                     </map>
                                   </option>
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
