@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Multiply</string>
+    <string name="admob_id">ca-app-pub-7770817076154327~8421119920</string>
+    <string name="ad_unit_id">ca-app-pub-7770817076154327/5996452359</string>
     <string name="confirm">Are you sure you want to restart the game?</string>
     <string name="validate">Do you want to check your answers?</string>
     <string name="validate_error">When you have filled in the entire grid, click here.</string>
@@ -12,4 +14,6 @@
     <string name="info_page_text">An app about multiplication. Complete the grid as fast as you can.</string>
     <string name="simple_calculator">Simple Calculator: Pick a number above</string>
     <string name="number_entry">Number Entry: Pick a space above</string>
+    <string name="remove_ads">Remove Ads</string>
+    <string name="local_currency">All prices are in the local currency</string>
 </resources>

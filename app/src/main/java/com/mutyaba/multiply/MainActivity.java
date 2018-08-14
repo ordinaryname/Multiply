@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -17,6 +16,10 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,6 +35,10 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
     public Boolean cViewSwitch;
     public int i1, i2;
     public Chronometer chronometer;
+    public int plays;
+    public boolean ads;
+    public SharedPreferences sharedPreferences;
+    public InterstitialAd interstitialAd;
 
     private  View.OnClickListener btnOnClick = new View.OnClickListener() {
         @Override
@@ -70,10 +77,30 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
         for(int i = 0; i < intArray.size(); i++) {
             intArray.valueAt(i).setOnClickListener(btnOnClick);
         }
+
+        sharedPreferences = getSharedPreferences("com.mutyaba.multiply.scores", Context.MODE_PRIVATE);
+        plays = sharedPreferences.getInt("plays", 0);
+        ads = sharedPreferences.getBoolean("ads", true);
+
+        if(ads) {
+            interstitialAd = new InterstitialAd(this);
+            //For production use: interstitialAd.setAdUnitId(R.string.ad_unit_id);
+            interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+            // Use the following in production:
+            // interstitialAd.loadAd(new AdRequest.Builder().build());
+            interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("2E1DCFA6A6C9EFA32FC41808CC708A0E").build());
+            interstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    startActivity(new Intent(MainActivity.this, StartGame.class));
+                }
+            });
+        }
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+    protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.parseColor("#cccccc"));
     }
@@ -349,8 +376,15 @@ public class MainActivity extends Activity implements Confirmation.ConfirmationL
                     SaveTime(chronometer.getText().toString());
                     Log.d("Chronometer", chronometer.getText().toString());
                     Toast.makeText(this, "Congratulations!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, StartGame.class);
-                    startActivity(intent);
+                    plays++;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("plays", plays);
+                    editor.apply();
+                    if(plays % 2 == 0 && ads && interstitialAd.isLoaded()) {
+                        interstitialAd.show();
+                    } else {
+                        startActivity(new Intent(this, StartGame.class));
+                    }
                 }
             }
         }
